@@ -1,0 +1,12 @@
+﻿  imgui_tables.cpp
+  dllmain.cpp
+  hooks.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_dx12.cpp
+  imgui_impl_win32.cpp
+  imgui_widgets.cpp
+  kiero.cpp
+  Generating Code...
+  Chained Together Trainer.vcxproj -> E:\Coding\Chained Together Trainer\Chained Together Trainer\x64\Debug\Chained Together Trainer.dll
