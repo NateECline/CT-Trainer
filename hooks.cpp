@@ -10,13 +10,15 @@
 #include <MinHook.h>
 
 typedef HRESULT(__stdcall* Present)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
-Present oPresent = nullptr;
-HWND gameWindow = nullptr;
+static Present oPresent = nullptr;
+static HWND gameWindow = nullptr;
+static ID3D11RenderTargetView* rtv = nullptr;
+static ID3D11Device* device = nullptr;
+static ID3D11DeviceContext* context = nullptr;
 
 void InitImGui(IDXGISwapChain* pSwapChain);
 
-void InitializeTrainer()
-{
+void InitializeTrainer() {
     std::cout << "Starting InitializeTrainer..." << std::endl;
 
     if (MH_Initialize() != MH_OK) {
@@ -78,11 +80,9 @@ void InitializeTrainer()
     std::cout << "Kiero bind succeeded." << std::endl;
 }
 
-HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
-{
+HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags) {
     static bool init = false;
-    if (!init)
-    {
+    if (!init) {
         std::cout << "Initializing ImGui..." << std::endl;
         InitImGui(pSwapChain);
         init = true;
@@ -98,54 +98,63 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
     ImGui::End();
 
     ImGui::Render();
-    ID3D11DeviceContext* context = nullptr;
-    pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&context);
+    context->OMSetRenderTargets(1, &rtv, nullptr);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-    context->Release();
 
     return oPresent(pSwapChain, SyncInterval, Flags);
 }
 
-void InitImGui(IDXGISwapChain* pSwapChain)
-{
-    ID3D11Device* device = nullptr;
-    ID3D11DeviceContext* context = nullptr;
-    ID3D11RenderTargetView* rtv = nullptr;
+// assert only works in debug build, you can undef NDEBUG to enable this in release build
+// #undef NDEBUG
+#include <assert.h>
+#define assertm(exp, msg) assert(((void)msg, (exp)))
 
-    if (FAILED(pSwapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<void**>(&device))))
+void InitImGui(IDXGISwapChain* pSwapChain) {
+    bool result;
+    DXGI_SWAP_CHAIN_DESC sd;
+    ID3D11Texture2D* backBuffer;
+
+    // init d3d11
     {
-        std::cout << "Failed to get D3D11 device." << std::endl;
-        return;
+        result = SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<void**>(&device)));
+
+        assertm(result, "Failed to get D3D11 device.");
+    
+        std::cout << "D3D11 device acquired." << std::endl;
+
+        device->GetImmediateContext(&context);
+
+        // get main window hwnd
+        pSwapChain->GetDesc(&sd);
+    
+        gameWindow = sd.OutputWindow;
     }
-    std::cout << "D3D11 device acquired." << std::endl;
 
-    device->GetImmediateContext(&context);
-
-    ID3D11Texture2D* backBuffer = nullptr;
-    if (FAILED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer)))
+    // create render target
     {
-        std::cout << "Failed to get back buffer." << std::endl;
-        return;
-    }
-    std::cout << "Back buffer acquired." << std::endl;
+        result = SUCCEEDED(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer));
 
-    if (FAILED(device->CreateRenderTargetView(backBuffer, NULL, &rtv)))
-    {
+        assertm(result, "Failed to get back buffer.");
+    
+        std::cout << "Back buffer acquired." << std::endl;
+
+        result = SUCCEEDED(device->CreateRenderTargetView(backBuffer, NULL, &rtv));
+    
+        assertm(result, "Failed to create render target view.");
+    
+        std::cout << "Render target view created." << std::endl;
+    
         backBuffer->Release();
-        std::cout << "Failed to create render target view." << std::endl;
-        return;
     }
-    std::cout << "Render target view created." << std::endl;
-    backBuffer->Release();
+    
+    // init imgui
+    {
+        ImGui::CreateContext();
+    
+        ImGui_ImplWin32_Init(gameWindow); // Use the global HWND here
+    
+        ImGui_ImplDX11_Init(device, context);
 
-    ImGui::CreateContext();
-    ImGui_ImplWin32_Init(gameWindow); // Use the global HWND here
-    ImGui_ImplDX11_Init(device, context);
-
-    context->OMSetRenderTargets(1, &rtv, NULL);
-
-    rtv->Release();
-    context->Release();
-    device->Release();
-    std::cout << "ImGui initialized." << std::endl;
+        std::cout << "ImGui initialized." << std::endl;
+    }
 }
