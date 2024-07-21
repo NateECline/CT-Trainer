@@ -134,7 +134,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)kiero;$(ProjectDir)imgui\backends;$(ProjectDir)minhook;$(ProjectDir)minhook\include;$(ProjectDir)minhook\src;$(ProjectDir)imgui;$(ProjectDir)hde64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)kiero;$(ProjectDir)imgui\backends;$(ProjectDir)minhook;$(ProjectDir)minhook\include;$(ProjectDir)minhook\src;$(ProjectDir)imgui;$(ProjectDir)hde64;$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,8 +143,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(ProjectDir)minhook\src;$(ProjectDir)minhook\Release;$(ProjectDir)minhook\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\um\x64\d3d11.lib;d3d11.lib;
+      <AdditionalLibraryDirectories>$(ProjectDir)minhook\src;$(ProjectDir)minhook\Release;$(ProjectDir)minhook\libs;$(ProjectDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\um\x64\d3d11.lib;C:\Users\Powni\Desktop\lua\lua-5.4.7\lua.lib;lua.lib;d3d11.lib;
 dxgi.lib;
 kernel32.lib;
 user32.lib;
@@ -158,25 +159,65 @@ uuid.lib;
 odbc32.lib;
 odbccp32.lib;
 libMinHook.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\minHook\minhook\include\MinHook.h" />
     <ClInclude Include="..\..\..\minHook\minhook\src\hde\hde64.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lapi.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lcode.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lctype.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\ldebug.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\ldo.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lfunc.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lgc.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\ljumptab.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\llex.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\llimits.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lmem.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lobject.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lopcodes.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lopnames.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lparser.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lprefix.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lstate.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lstring.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\ltable.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\ltm.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lua.hpp" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\luaconf.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lundump.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lvm.h" />
+    <ClInclude Include="C:\Users\Powni\Desktop\lua\lua-5.4.7\src\lzio.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="gui.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="imgui\backends\imgui_impl_dx11.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="imgui\include\imconfig.h" />
     <ClInclude Include="imgui\include\imgui.h" />
     <ClInclude Include="imgui\include\imgui_impl_dx12.h" />
-    <ClInclude Include="imgui\include\imgui_impl_win32.h" />
     <ClInclude Include="imgui\include\imgui_internal.h" />
     <ClInclude Include="imgui\include\imstb_rectpack.h" />
     <ClInclude Include="imgui\include\imstb_textedit.h" />
     <ClInclude Include="imgui\include\imstb_truetype.h" />
+    <ClInclude Include="include\lauxlib.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\lua.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\lualib.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="kiero\kiero.h" />
+    <ClInclude Include="luahandler.h" />
+    <ClInclude Include="lua_headers.h" />
+    <ClInclude Include="memory.h" />
+    <ClInclude Include="pattern_scanner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\imgui\imgui\imgui_tables.cpp" />
@@ -186,6 +227,7 @@ libMinHook.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="dllmain.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="gui.cpp" />
     <ClCompile Include="hooks.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -206,6 +248,7 @@ libMinHook.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -213,11 +256,20 @@ libMinHook.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="kiero\kiero.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="luahandler.cpp" />
+    <ClCompile Include="lua_headers.cpp" />
+    <ClCompile Include="memory.cpp" />
     <ClCompile Include="minhook\src\hde64.c" />
+    <ClCompile Include="pattern_scanner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\um\x64\d3d12.lib" />
     <Library Include="C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\um\x64\dxgi.lib" />
+    <Library Include="libs\lua.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="generate_lua_headers.py" />
+    <None Include="hello_world.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
